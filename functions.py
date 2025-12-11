@@ -28,17 +28,6 @@ def weather_score(weather_data):
     score -= clouds * 0.25
     return max(0, min(100, score))
 
-def year_selection(period):
-    if period == "classic":
-        start, end = 1930, 1969
-    if period == "modern":
-        start, end = 1970, 1999
-    if period == "recent":
-        start, end = 2000, 2025
-    else:
-        start, end = 1930, 2025
-    return random.sample(range(start, end + 1), 3)
-
 GENRE_SCORES = {
     "action": 55,
     "adventure": 65,
@@ -71,7 +60,7 @@ GENRE_SCORES = {
 positive_keywords = ["friendship","friend","hero","love","dancing","singing","happy","funny"]
 negative_keywords = ["fight","violence","murder","death","betrayal","health crisis","blood","crime"]
 
-def movie_score(genres, keywords=None):
+def movie_score(genres, plot, keywords=None):
     if not genres:
         return 50
     genres_split = []
@@ -80,16 +69,39 @@ def movie_score(genres, keywords=None):
     total = 0
     for g in genres_split:
         total += GENRE_SCORES.get(g, 50)
-    score = total / len(genres)
-    if keywords:
-        for word in keywords:
-            word = word.lower()
-            if word in positive_keywords:
-                score += 5
-            if word in negative_keywords:
-                score -= 5
+    score = total / len(genres_split)
+    words = plot.lower().split()
+    for word in words:
+        word = word.lower()
+        if word in positive_keywords:
+            score += 5
+        elif word in negative_keywords:
+            score -= 5
     return max(0, min(100, score))
 
-def
+def year_selection(period):
+    if period == "classic":
+        start, end = 1930, 1969
+    elif period == "modern":
+        start, end = 1970, 1999
+    elif period == "recent":
+        start, end = 2000, 2025
+    else:
+        start, end = 1930, 2025
+    return random.sample(range(start, end + 1), 3)
 
-
+def get_movies(year):
+    SEARCH_WORDS = ["the", "love","one","life","big","star","dream","dark","story","world","money","girl","boy","man","woman","tale","secret","first","good","bad"]
+    movies = []
+    attempt = 0
+    while not movies and attempt < 5:
+        search = random.choice(SEARCH_WORDS)
+        url = f"http://www.omdbapi.com/?apikey={OMDB_API}&s={search}&y={year}&type=movie"
+        response = requests.get(url).json()
+        if response.get("Response") == "True":
+            movies = response.get("Search",[])
+        attempt += 1
+    if not movies:
+        return []
+    random.shuffle(movies)
+    return movies[:3]
