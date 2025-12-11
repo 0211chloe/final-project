@@ -74,9 +74,12 @@ negative_keywords = ["fight","violence","murder","death","betrayal","health cris
 def movie_score(genres, keywords=None):
     if not genres:
         return 50
+    genres_split = []
+    for g in genres.split(","):
+        genres_split.append(g.lower())
     total = 0
-    for g in genres:
-        total += GENRE_SCORES.get(g.lower, 50)
+    for g in genres_split:
+        total += GENRE_SCORES.get(g, 50)
     score = total / len(genres)
     if keywords:
         for word in keywords:
@@ -86,5 +89,7 @@ def movie_score(genres, keywords=None):
             if word in negative_keywords:
                 score -= 5
     return max(0, min(100, score))
+
+
 
 
