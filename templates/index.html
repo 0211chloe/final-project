@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{{ url_for('results') }}" method="post">
+
+        <p>
+            <label for="city" class="form-label">Enter location (city):</label>
+            <input class="form-control" type="text" name="city" required>
+        </p>
+
+        <p>
+            <label for="period" class="form-label">Select time period:</label>
+            <select class="form-select" name="period">
+                <option value="">Any</option>
+                <option value="classic">Classic (before 1970)</option>
+                <option value="modern">Modern (1970-2000)</option>
+                <option value="recent">Recent (2000+)</option>
+            </select>
+        </p>
+
+        <p>
+           <button class="btn btn-success" type="submit">Get Recommendations</button>
+        </p>
+
+    </form>
+{% endblock %}

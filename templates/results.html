@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Top Movie Recommendations for {{ city }}</h2>
+<div class="movies-container">
+    {% for movie in movies %}
+        <div class="movie">
+            <div class="poster">
+                    <img src="{{ movie.Poster if movie.Poster != 'N/A' else url_for('static', filename='no-poster.png') }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='no-poster.png') }}';">
+            </div>
+            <div class="details">
+                <div class="title">{{ movie.Title }} ({{ movie.Year }})</div>
+                <div class="info">
+                    <strong>Genre:</strong> {{ movie.Genre }}<br>
+                    <strong>Director:</strong> {{ movie.Director }}<br>
+                    <strong>Cast:</strong> {{ movie.Actors }}<br>
+                    <strong>Plot:</strong> {{ movie.Plot }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<a href="{{ url_for('index') }}">Search again</a>
+{% endblock %}

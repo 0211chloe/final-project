@@ -3,10 +3,14 @@ from functions import movie_recs
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/', methods=["GET"])
 def index():
-    if request.method == "POST":
-        city = request.form.get("city")
-        period = request.form.get("period")
-        movies = movie_recs(city, period)
-    return render_template("index.html", movies=movies)
+    return render_template('index.html')
+
+@app.route("/results", methods=["POST"])
+def results():
+    movies = []
+    city = request.form.get("city")
+    period = request.form.get("period")
+    movies = movie_recs(city, period)
+    return render_template("results.html", movies=movies, city=city)
