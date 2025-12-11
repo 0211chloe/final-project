@@ -39,5 +39,52 @@ def year_selection(period):
         start, end = 1930, 2025
     return random.sample(range(start, end + 1), 3)
 
+GENRE_SCORES = {
+    "action": 55,
+    "adventure": 65,
+    "animation": 95,
+    "biography": 45,
+    "comedy": 90,
+    "crime": 35,
+    "documentary": 50,
+    "drama": 40,
+    "family": 85,
+    "fantasy": 70,
+    "film-noir": 25,
+    "game-show": 60,
+    "history": 50,
+    "horror": 15,
+    "music": 75,
+    "musical": 80,
+    "mystery": 30,
+    "news": 55,
+    "reality-tv": 20,
+    "romance": 75,
+    "scifi": 67,
+    "sport": 70,
+    "talk-show": 60,
+    "thriller": 37,
+    "war": 20,
+    "western": 45
+}
+
+positive_keywords = ["friendship","friend","hero","love","dancing","singing","happy","funny"]
+negative_keywords = ["fight","violence","murder","death","betrayal","health crisis","blood","crime"]
+
+def movie_score(genres, keywords=None):
+    if not genres:
+        return 50
+    total = 0
+    for g in genres:
+        total += GENRE_SCORES.get(g.lower, 50)
+    score = total / len(genres)
+    if keywords:
+        for word in keywords:
+            word = word.lower()
+            if word in positive_keywords:
+                score += 5
+            if word in negative_keywords:
+                score -= 5
+    return max(0, min(100, score))
 
 
