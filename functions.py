@@ -27,3 +27,17 @@ def weather_score(weather_data):
         score -= 15
     score -= clouds * 0.25
     return max(0, min(100, score))
+
+def year_selection(period):
+    if period == "classic":
+        start, end = 1930, 1969
+    if period == "modern":
+        start, end = 1970, 1999
+    if period == "recent":
+        start, end = 2000, 2025
+    else:
+        start, end = 1930, 2025
+    return random.sample(range(start, end + 1), 3)
+
+
+
