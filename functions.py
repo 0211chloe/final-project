@@ -21,9 +21,9 @@ def weather_score(weather_data):
     clouds = weather_data["clouds"]["all"]
     score = 50
     score += (temp - 50) * 0.5
-    score -= clouds * 0.25
     if condition == "clear":
         score += 20
     if condition in {"thunderstorm", "drizzle", "rain", "snow"}:
         score -= 15
+    score -= clouds * 0.25
     return max(0, min(100, score))
