@@ -105,3 +105,32 @@ def get_movies(year):
         return []
     random.shuffle(movies)
     return movies[:3]
+
+def movie_details(id):
+    url = f"http://www.omdbapi.com/?apikey={OMDB_API}&i={id}&plot=full&type=movie"
+    response = requests.get(url).json()
+    if response.get("Response") == "True":
+        return response
+    return None
+
+def movie_recs(city, period):
+    weather_data = get_weather(city)
+    if not weather_data:
+        return None
+    w_score = weather_score(weather_data)
+    years = year_selection(period)
+    options = []
+    for year in years:
+        for movie in get_movies(year):
+            details = movie_details(movie["imdbID"])
+            if details:
+                options.append(details)
+    scored_movies = []
+    for movie in options:
+        score = movie_score(movie.get("Genre", ""), movie.get("Plot", ""))
+        scored_movies.append((score, movie))
+    scored_movies.sort(key=lambda x: abs(x[0] - w_score))
+    recs = []
+    for score, movie in scored_movies[:3]:
+        recs.append(movie)
+    return recs
