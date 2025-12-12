@@ -12,5 +12,5 @@ def results():
     movies = []
     city = request.form.get("city")
     period = request.form.get("period")
-    movies = movie_recs(city, period)
-    return render_template("results.html", movies=movies, city=city)
+    movies, temp, condition, clouds = movie_recs(city, period)
+    return render_template("results.html", movies=movies, city=city, temp=temp, condition=condition, clouds=clouds)

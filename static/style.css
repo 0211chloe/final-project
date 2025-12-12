@@ -1,7 +1,11 @@
 body {
     display: flex;
     flex-direction: column;
-    align-items: center
+    align-items: center;
+    background-image: url("movie-background-collage.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white
 }
 
 h1 {

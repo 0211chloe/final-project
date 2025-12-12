@@ -133,4 +133,7 @@ def movie_recs(city, period):
     recs = []
     for score, movie in scored_movies[:3]:
         recs.append(movie)
-    return recs
+    temp = weather_data["main"]["temp"]
+    condition = weather_data["weather"][0]["main"]
+    clouds = weather_data["clouds"]["all"]
+    return recs, temp, condition, clouds
