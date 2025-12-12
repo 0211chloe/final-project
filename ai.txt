@@ -58,7 +58,7 @@ I used ChatGPT to fix my movie posters (again).
 Prompt: sometimes the poster still doesnt load...i know there is a poster bc the no poster shows up for the ones without a poster
 Modifications: I added onerror so that it would default to the no poster image if there was trouble with the movie poster.
 
-I used ChatGPT to double check that my scoring works.
+I used ChatGPT to doublecheck that my scoring works.
 Prompt: is there a way to print out the movies, the scores, and the weather scores to see if it is working correctly. not on the webpage just like through the terminal or smth
 Modifications: I used the code ChatGPT gave me to print out my results in the terminal but I deleted it after as I was just using it to doublecheck that everything worked correctly.
 
