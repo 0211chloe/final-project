@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Top Movie Recommendations for: {{ city }}</h2>
+<h2>Top Movie Recommendations for: <i>{{ city }}</i></h2>
 <div class="weather-box">
-    <strong>Based on:</strong> {{ temp }}°F, {{ condition }}, {{ clouds }}% clouds
+    <strong>Based on:</strong>
+    <span class="weather-values">{{ temp }}°F, {{ condition }}, {{ clouds }}% clouds</span>
 </div>
 <div class="movies-container">
     {% for movie in movies %}
@@ -23,5 +24,11 @@
         </div>
     {% endfor %}
 </div>
-<a href="{{ url_for('index') }}">Search again</a>
+    <footer>
+        <a class="text-warning" href="{{ url_for('index') }}">Search again</a>.
+        Data from
+        <a href="https://www.omdbapi.com/" target="_blank">The Open Movie Database</a>
+        and
+        <a href="https://openweathermap.org/" target="_blank">OpenWeather</a>.
+    </footer>
 {% endblock %}
