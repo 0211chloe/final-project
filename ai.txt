@@ -1,0 +1,64 @@
+I used ChatGPT to understand importing the API keys.
+Prompt: how do i add api keys without sharing what they are
+Modifications: I was told to create .env and make sure that it was in my gitignore (it already was) and load them with load_dotenv()
+
+I used ChatGPT to check my starting code.
+Prompt: does this work def get_weather(city):
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_API}&units=imperial"
+    response = requests.get(url)
+    if response.status_code != 200:
+        print(f"Error: {response.status_code}")
+        return None
+    return response.json()
+Modifications: I did not change anything as it worked but I did get suggestions on what I could change
+
+I used ChatGPT for help with get_movies.
+Prompt: how can i get random movies that are released in a specific year based on searching up keywords on omdb
+Modifications: I was told to make a loop to get random movies and add an attempt option to make sure it is not calling the api too many times.
+
+I used ChatGPT to help debug my get_movies.
+Prompt: why is this not working to add movies if response.status_code == 200: movies.append({})
+Modifications: I learned that I can't used append here and need to check if the response is true and then do get
+
+I used ChatGPT to find the movie with the closest score to the weather.
+Prompt: how do i compare the movie scores with the weather score import requests import random from dotenv import load_dotenv import os load_dotenv() OPENWEATHER_API = os.getenv("OPENWEATHER_API") OMDB_API = os.getenv("OMDB_API") def get_weather(city): url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_API}&units=imperial" response = requests.get(url) if response.status_code != 200: print(f"Error: {response.status_code}") return None return response.json() def weather_score(weather_data): temp = weather_data["main"]["temp"] condition = weather_data["weather"][0]["main"].lower() clouds = weather_data["clouds"]["all"] score = 50 score += (temp - 50) * 0.5 if condition == "clear": score += 20 if condition in {"thunderstorm", "drizzle", "rain", "snow"}: score -= 15 score -= clouds * 0.25 return max(0, min(100, score)) GENRE_SCORES = { "action": 55, "adventure": 65, "animation": 95, "biography": 45, "comedy": 90, "crime": 35, "documentary": 50, "drama": 40, "family": 85, "fantasy": 70, "film-noir": 25, "game-show": 60, "history": 50, "horror": 15, "music": 75, "musical": 80, "mystery": 30, "news": 55, "reality-tv": 20, "romance": 75, "scifi": 67, "sport": 70, "talk-show": 60, "thriller": 37, "war": 20, "western": 45 } positive_keywords = ["friendship","friend","hero","love","dancing","singing","happy","funny"] negative_keywords = ["fight","violence","murder","death","betrayal","health crisis","blood","crime"] def movie_score(genres, plot, keywords=None): if not genres: return 50 genres_split = [] for g in genres.split(","): genres_split.append(g.lower()) total = 0 for g in genres_split: total += GENRE_SCORES.get(g, 50) score = total / len(genres_split) words = plot.lower().split() for word in words: word = word.lower() if word in positive_keywords: score += 5 elif word in negative_keywords: score -= 5 return max(0, min(100, score)) def year_selection(period): if period == "classic": start, end = 1930, 1969 elif period == "modern": start, end = 1970, 1999 elif period == "recent": start, end = 2000, 2025 else: start, end = 1930, 2025 return random.sample(range(start, end + 1), 3) def get_movies(year): SEARCH_WORDS = ["the", "love","one","life","big","star","dream","dark","story","world","money","girl","boy","man","woman","tale","secret","first","good","bad"] movies = [] attempt = 0 while not movies and attempt < 5: search = random.choice(SEARCH_WORDS) url = f"http://www.omdbapi.com/?apikey={OMDB_API}&s={search}&y={year}&type=movie" response = requests.get(url).json() if response.get("Response") == "True": movies = response.get("Search",[]) attempt += 1 if not movies: return [] random.shuffle(movies) return movies[:3] def movie_details(id): url = f"http://www.omdbapi.com/?apikey={OMDB_API}&i={id}&plot=full&type=movie" response = requests.get(url).json() if response.get("Response") == "True": return response return None def movie_recs(city, period): weather_data = get_weather(city) if not weather_data: return None w_score = weather_score(weather_data) years = year_selection(period) options = [] for year in years: for movie in get_movies(year): details = movie_details(movie["imdbID"]) if details: options.append(details) scored_movies = [] for movie in options: score = movie_score(movie.get("Genre", ""), movie.get("Plot", "")) scored_movies.append((score, movie))
+Modifications: I was told to use scored_movies.sort(key=lambda x: abs(x[0] - w_score)) to compare the scores and find the closest ones
+
+I used ChatGPT to make a starter results page.
+Prompt: for the results i want to have it so its in a list order (top to bottom) the movie poster on the left and then the title on the right (bigger) and then info underneath the title
+Modifications: I adjusted the format to my liking and customized it more
+
+I used ChatGPT to help me fix the missing movie posters:
+Prompt: why is the movie poster not always displaying {% extends "base.html" %}
+{% block content %}
+    <h2>Top Movie Recommendations for {{ city }}:</h2>
+    <div>
+        {% for movie in movies %}
+            <div class="movie">
+                <div class="poster">
+                    <img src="{{ movie.Poster }}" alt="Poster" width="100">
+                </div>
+                <div>
+                    <div class="title">{{ movie.Title }} ({{ movie.Year }})</div>
+                    <div class="info">
+                        Genre: {{ movie.Genre }}<br>
+                        Director: {{ movie.Director }}<br>
+                        Cast: {{ movie.Actors }}<br>
+                        Plot: {{ movie.Plot }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('index') }}">Search again</a>
+{% endblock %}
+Modifications: I added a no poster png to show up if there was no poster for the movie.
+
+I used ChatGPT to fix my movie posters (again).
+Prompt: sometimes the poster still doesnt load...i know there is a poster bc the no poster shows up for the ones without a poster
+Modifications: I added onerror so that it would default to the no poster image if there was trouble with the movie poster.
+
+I used ChatGPT to double check that my scoring works.
+Prompt: is there a way to print out the movies, the scores, and the weather scores to see if it is working correctly. not on the webpage just like through the terminal or smth
+Modifications: I used the code ChatGPT gave me to print out my results in the terminal but I deleted it after as I was just using it to doublecheck that everything worked correctly.
+
